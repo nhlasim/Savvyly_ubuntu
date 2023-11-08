@@ -46,8 +46,9 @@ INSTALLED_APPS = [
     #My Apps
     'core', 
     'userauths',
-     'account',
-     'django_crontab',
+    'account',
+    'django_crontab',
+    'django_mailbox',
 ]
 
 MIDDLEWARE = [

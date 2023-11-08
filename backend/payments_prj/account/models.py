@@ -3,6 +3,9 @@ import uuid
 from shortuuid.django_fields import ShortUUIDField
 from userauths.models import User
 from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django_mailbox.signals import message_received
+import re
 
 ACCOUNT_STATUS = (
     ("active", "Active"),
@@ -42,6 +45,46 @@ IDENTITY_TYPE = (
 #     ("nigeria", "Nigeria"),
 # )
 
+@receiver(message_received)
+def dance_jig(sender, message, **args):
+    # print ("massage received")
+    # print ("I just recieved a message titled %s from a mailbox named %s with body %s " % (message.subject, message.mailbox.name, message.text, ))
+    text = message.text
+  
+    #Check if this is incoming payment
+    string_list = re.split("\s", text)
+    print(string_list)
+    i = 0
+    while i < len(string_list):
+        if (string_list[i-1] == 'Incoming' and string_list[i] == 'payment'):
+            print("Incoming payment")
+            break
+        i += 1
+    
+    #Reference nunber code    
+    # string_list = re.split("\s", text)
+    # print(string_list)
+    # i = 0
+    # while i < len(string_list):
+    #     if string_list[i] == 'Reference:':
+    #         reference_number = string_list[i+1] 
+    #         print(reference_number)
+    #         break
+    #     i += 1
+        
+        
+    # Reading the amount trasnferred code
+    # numbers = [float(num) for num in re.findall(r'[\d.]+', text)]
+    # print("Amount deposited %s " % (numbers[0],))
+    # print("Reference number %s " % (int(numbers[2]),))
+    
+
+
+
+def user_directory_path(instance, filename):
+    ext = filename.split(".")[-1]  #"." mean that we are taking the file extension like png jpg etc
+    filename = "%s_%s" % (instance.id, ext)
+    return "user_{0}/{1}".format(instance.user.id, filename)
 
 def user_directory_path(instance, filename):
     ext = filename.split(".")[-1]  #"." mean that we are taking the file extension like png jpg etc
