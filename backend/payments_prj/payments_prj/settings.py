@@ -160,3 +160,7 @@ JAZZMIN_SETTINGS = {
 #     "theme": "flatly",
 #     "dark_mode_theme": "darkly",
 # }
+
+CRONJOBS = [
+    ('*/1 * * * *', 'account.cron.my_scheduled_job', '>> /home/nhlanhla/Desktop/Savvyly_ubuntu/backend/payments_prj/account/file.log')
+]
